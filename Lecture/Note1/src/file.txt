@@ -1,0 +1,5 @@
++10.1     sunny
+ +8.5    cloudy
+ +0.0     windy
+ -1.1     snowy
+-15.7    stormy
