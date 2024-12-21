@@ -26,5 +26,6 @@ int main()
         painting << endl;
     }
 
-
+    painting.close();
+    return 0;
 }
