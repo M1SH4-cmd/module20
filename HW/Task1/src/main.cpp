@@ -39,5 +39,6 @@ int main()
     lineToAdd += buffer;
     file << lineToAdd << endl;
     }
+    file.close();
     return 0;
 }
