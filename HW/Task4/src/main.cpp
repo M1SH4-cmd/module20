@@ -15,8 +15,10 @@ int totalAmount = 0;
 void loadATM() {
     ifstream infile("atm_state.bin", ios::binary);
     if (infile) {
-        infile.read(reinterpret_cast<char*>(bills), sizeof(bills));
-        infile.read(reinterpret_cast<char*>(&totalAmount), sizeof(totalAmount));
+        for (int i = 0; i < 6; ++i) {
+            infile.read((char*) &bills[i], sizeof(bills[i]));
+        }
+        infile.read((char*) &totalAmount, sizeof(totalAmount));
         infile.close();
     } else {
         cout << "ATM is empty." << endl;
@@ -25,14 +27,16 @@ void loadATM() {
 
 void saveATM() {
     ofstream outfile("atm_state.bin", ios::binary);
-    outfile.write(reinterpret_cast<const char*>(bills), sizeof(bills));
-    outfile.write(reinterpret_cast<const char*>(&totalAmount), sizeof(totalAmount));
+    for (int i = 0; i < 6; ++i) {
+        outfile.write((char*) &bills[i], sizeof(bills[i]));
+    }
+    outfile.write((char*) &totalAmount, sizeof(totalAmount));
     outfile.close();
 }
 
 void fillATM() {
     srand(time(0));
-    for (size_t i = 0; i < DENOMINATIONS.size(); ++i) {
+    for (int i = 0; i < 6; ++i) {
         int randomBills = rand() % (MAX_BILLS - totalAmount / DENOMINATIONS[i]) + 1;
         bills[i] += randomBills;
         totalAmount += randomBills * DENOMINATIONS[i];
@@ -46,7 +50,7 @@ bool withdraw(int amount) {
         return false;
     }
 
-    for (size_t i = 0; i < DENOMINATIONS.size(); ++i) {
+    for (int i = 0; i < 6; ++i) {
         while (amount >= DENOMINATIONS[i] && bills[i] > 0) {
             amount -= DENOMINATIONS[i];
             bills[i]--;
@@ -64,7 +68,7 @@ bool withdraw(int amount) {
 
 void printATMState() {
     cout << "Current ATM state:" << endl;
-    for (size_t i = 0; i < DENOMINATIONS.size(); ++i) {
+    for (int i = 0; i < 6; ++i) {
         cout << DENOMINATIONS[i] << " rubles: " << bills[i] << endl;
     }
     cout << "Current sum: " << totalAmount << " rubles." << endl;
@@ -76,7 +80,7 @@ int main() {
 
     string command;
     while (true) {
-        cout << "Enter comand (+ to input money, - for withdrawal, q to exit): ";
+        cout << "Enter command (+ to input money, - for withdrawal, q to exit): ";
         cin >> command;
 
         if (command == "+") {
