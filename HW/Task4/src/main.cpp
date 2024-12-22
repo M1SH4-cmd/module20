@@ -6,6 +6,16 @@
 
 using namespace std;
 
+void displayATMState(int money[1000], int bills[5]) {
+    int totalAmount = 0;
+    std::cout << "Current ATM state:\n";
+    for (int i = 0; i < 1000; ++i) {
+        std::cout << "Banknotes " << money[i] << " rubles: " << money[i] << "\n";
+        totalAmount += money[i] * bills[i];
+    }
+    std::cout << "Current sum: " << totalAmount << " rubles\n";
+}
+
 int main()
 {
     int bills[5] = {100, 200, 500, 1000, 5000};
@@ -34,6 +44,7 @@ int main()
         ofstream file_out("..\\money.bin");
         file_out.write((char*) money, sizeof(money));
         file_out.close();
+        displayATMState(money, bills);
         return 0;
     } else if(op == "-") {
         cout << "Ammount: ";
@@ -45,7 +56,7 @@ int main()
         }
 
         int amountToCollect = amount;
-        for (int i = 4; i >= 0; --i) { // 
+        for (int i = 4; i >= 0; --i) {
             int bill = bills[i];
             for (int j = 0; j < 1000; ++j) {
                 if (money[j] == bill) {
@@ -57,6 +68,7 @@ int main()
                             ofstream file_out("..\\money.bin");
                             file_out.write((char*) money, sizeof(money));
                             file_out.close();
+                            displayATMState(money, bills);
                             return 0;
                         }
                     }
@@ -65,5 +77,6 @@ int main()
         }
     }
     cout << "Not enough compatible bills!" << endl;
+    displayATMState(money, bills);
     return 1;
 }
