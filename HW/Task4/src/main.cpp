@@ -50,11 +50,26 @@ int main()
         for (int i = 0; i < 1000; ++i) {
             if (money[i] == 0) {
                 money[i] = bills[rand() % 5];
+                // Увеличиваем счетчик для добавленной купюры
+                for (int j = 0; j < 5; ++j) {
+                    if (money[i] == bills[j]) {
+                        count[j]++;
+                        totalAmount += money[i]; // Обновляем общую сумму
+                    }
+                }
             }
         }
         ofstream file_out("..\\money.bin", ios::binary);
         file_out.write((char*)money, sizeof(money));
         file_out.close();
+
+        // Вывод статуса банкомата сразу после операции "+"
+        cout << "ATM status after deposit:" << endl;
+        for (int j = 0; j < 5; ++j) {
+            cout << bills[j] << ": " << count[j] << endl;
+        }
+        cout << "Total amount: " << totalAmount << endl;
+
         return 0;
     } else if (op == "-") {
         cout << "Amount: ";
